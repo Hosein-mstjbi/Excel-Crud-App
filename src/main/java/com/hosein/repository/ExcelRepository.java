@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.util.*;
 
-import static org.springframework.web.servlet.tags.form.TagIdGenerator.nextId;
 
 /**
  * لایه ذخیره‌سازی (Repository) که مستقیماً روی فایل اکسل کار می‌کند.
@@ -70,12 +69,12 @@ public class ExcelRepository {
                 if (row == null) {
                     continue;
                 }
-                Cell cellid = row.getCell(0);
-                if (cellid == null || formatter.formatCellValue(cellid).isBlank()) {
+                Cell cellId = row.getCell(0);
+                if (cellId == null || formatter.formatCellValue(cellId).isBlank()) {
                     continue;
                 }
                 Person person = new Person();
-                person.setId((int) Double.parseDouble(formatter.formatCellValue(cellid)));
+                person.setId((int) Double.parseDouble(formatter.formatCellValue(cellId)));
                 person.setFirstName(formatter.formatCellValue(row.getCell(1)));
                 person.setLastName(formatter.formatCellValue(row.getCell(2)));
                 person.setNationalCode(formatter.formatCellValue(row.getCell(3)));
@@ -132,6 +131,18 @@ public class ExcelRepository {
     }
 
     private int nextId(Sheet sheet) {
-        return 0;
+        int max = 0;
+        DataFormatter formatter = new DataFormatter();
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
+            Cell cellId = row.getCell(0);
+            if (cellId == null || formatter.formatCellValue(cellId).isBlank()) continue;
+            int val = (int) Double.parseDouble(formatter.formatCellValue(cellId));
+            if (val > max) {
+                max = val;
+            }
+        }
+        return max + 1;
     }
 }
