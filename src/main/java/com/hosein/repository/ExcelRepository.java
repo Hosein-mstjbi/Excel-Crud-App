@@ -127,7 +127,21 @@ public class ExcelRepository {
     }
 
     private void writeRow(Row row, Person person) {
+        getOrCreateCell(row, 0).setCellValue(person.getId());
+        getOrCreateCell(row, 1).setCellValue(person.getFirstName());
+        getOrCreateCell(row, 2).setCellValue(person.getLastName());
+        // کد ملی به صورت متن ذخیره می‌شود تا صفرهای ابتدایی از بین نروند
+        getOrCreateCell(row, 3).setCellValue(person.getNationalCode());
+        getOrCreateCell(row, 4).setCellValue(person.getBirthDate());
+    }
 
+
+    private Cell getOrCreateCell(Row row, int i) {
+        Cell cell = row.getCell(i);
+        if (cell == null) {
+            cell = row.createCell(i);
+        }
+        return cell;
     }
 
     private int nextId(Sheet sheet) {
