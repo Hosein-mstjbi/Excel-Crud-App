@@ -94,6 +94,48 @@ public class ExcelRepository {
         return findAll().stream().filter(p -> p.getId() == id).findFirst();
     }
 
+
+    /**
+     * حذف یک رکورد بر اساس شناسه و جابه‌جایی سطرهای پایین‌تر به بالا
+     */
+    public synchronized void deleteById(int id) {
+        try (FileInputStream fis = new FileInputStream(FILE_PATH);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+            int rowIndex = -1;
+            DataFormatter formatter = new DataFormatter();
+
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) continue;
+                Cell idCell = row.getCell(0);
+                if (idCell != null && !formatter.formatCellValue(idCell).isBlank()
+                        && (int) Double.parseDouble(formatter.formatCellValue(idCell)) == id) {
+                    rowIndex = i;
+                    break;
+                }
+            }
+
+            if (rowIndex != -1) {
+                int lastRowNum = sheet.getLastRowNum();
+                if (rowIndex < lastRowNum) {
+                    sheet.shiftRows(rowIndex + 1, lastRowNum, -1);
+                } else {
+                    Row row = sheet.getRow(rowIndex);
+                    if (row != null) {
+                        sheet.removeRow(row);
+                    }
+                }
+                try (FileOutputStream fos = new FileOutputStream(FILE_PATH)) {
+                    workbook.write(fos);
+                }
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("خطا در حذف رکورد از فایل اکسل", e);
+        }
+    }
+
     /**
      * ذخیره رکورد جدید یا به‌روزرسانی رکورد موجود.
      * اگر id برابر صفر باشد، رکورد جدید در نظر گرفته می‌شود و شناسه جدید تولید می‌شود.
