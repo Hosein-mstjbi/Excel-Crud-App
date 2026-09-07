@@ -88,6 +88,13 @@ public class ExcelRepository {
     }
 
     /**
+     * پیدا کردن یک رکورد بر اساس شناسه
+     */
+    public synchronized Optional<Person> findById(int id) {
+        return findAll().stream().filter(p -> p.getId() == id).findFirst();
+    }
+
+    /**
      * ذخیره رکورد جدید یا به‌روزرسانی رکورد موجود.
      * اگر id برابر صفر باشد، رکورد جدید در نظر گرفته می‌شود و شناسه جدید تولید می‌شود.
      */
