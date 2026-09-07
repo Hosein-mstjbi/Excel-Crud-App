@@ -123,6 +123,16 @@ public class ExcelRepository {
     // ---------- متدهای کمکی داخلی ----------
 
     private Row findRowById(Sheet sheet, int id) {
+        DataFormatter formatter = new DataFormatter();
+        for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+            Row row = sheet.getRow(i);
+            if (row == null) continue;
+            Cell idCell = row.getCell(0);
+            if (idCell != null && !formatter.formatCellValue(idCell).isBlank()
+                    && (int) Double.parseDouble(formatter.formatCellValue(idCell)) == id) {
+                return row;
+            }
+        }
         return null;
     }
 
