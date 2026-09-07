@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.util.*;
 
+import static org.springframework.web.servlet.tags.form.TagIdGenerator.nextId;
+
 /**
  * لایه ذخیره‌سازی (Repository) که مستقیماً روی فایل اکسل کار می‌کند.
  * تمام عملیات خواندن و نوشتن روی فایل به صورت synchronized انجام می‌شود
@@ -40,7 +42,7 @@ public class ExcelRepository {
                     Sheet sheet = workbook.createSheet(SHEET_NAME);
                     Row header = sheet.createRow(0);
                     for (int i = 0; i < HEADERS.length; i++) {
-                        header.createCell(1).setCellValue(HEADERS[i]);
+                        header.createCell(i).setCellValue(HEADERS[i]);
                     }
                     try (FileOutputStream fos = new FileOutputStream(file)) {
                         workbook.write(fos);
@@ -84,5 +86,52 @@ public class ExcelRepository {
             throw new RuntimeException("خطا در خواندن فایل اکسل", e);
         }
         return people;
+    }
+
+    /**
+     * ذخیره رکورد جدید یا به‌روزرسانی رکورد موجود.
+     * اگر id برابر صفر باشد، رکورد جدید در نظر گرفته می‌شود و شناسه جدید تولید می‌شود.
+     */
+    public synchronized Person save(Person person) {
+        try (FileInputStream fis = new FileInputStream(FILE_PATH);
+             Workbook workbook = new XSSFWorkbook(fis)) {
+
+            Sheet sheet = workbook.getSheetAt(0);
+
+            if (person.getId() == 0) {
+                person.setId(nextId(sheet));
+                Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+                writeRow(row, person);
+            } else {
+                Row existingRow = findRowById(sheet, person.getId());
+                if (existingRow != null) {
+                    writeRow(existingRow, person);
+                } else {
+                    Row row = sheet.createRow(sheet.getLastRowNum() + 1);
+                    writeRow(row, person);
+                }
+            }
+
+            try (FileOutputStream fos = new FileOutputStream(FILE_PATH)) {
+                workbook.write(fos);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("خطا در ذخیره‌سازی رکورد در فایل اکسل", e);
+        }
+        return person;
+    }
+
+    // ---------- متدهای کمکی داخلی ----------
+
+    private Row findRowById(Sheet sheet, int id) {
+        return null;
+    }
+
+    private void writeRow(Row row, Person person) {
+
+    }
+
+    private int nextId(Sheet sheet) {
+        return 0;
     }
 }
