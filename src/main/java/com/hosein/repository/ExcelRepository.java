@@ -1,14 +1,12 @@
 package com.hosein.repository;
 
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import com.hosein.model.Person;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Repository;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
 
 /**
  * لایه ذخیره‌سازی (Repository) که مستقیماً روی فایل اکسل کار می‌کند.
@@ -52,5 +50,39 @@ public class ExcelRepository {
         } catch (IOException e) {
             throw new RuntimeException("خطا در ایجاد فایل اکسل اولیه", e);
         }
+    }
+
+    /**
+     * ذخیره رکورد جدید یا به‌روزرسانی رکورد موجود.
+     * اگر id برابر صفر باشد، رکورد جدید در نظر گرفته می‌شود و شناسه جدید تولید می‌شود.
+     */
+    public synchronized List<Person> findAll() {
+        List<Person> people = new ArrayList<>();
+        DataFormatter formatter = new DataFormatter();
+
+        try (FileInputStream fis = new FileInputStream(FILE_PATH);
+             Workbook workbook = new XSSFWorkbook()) {
+            Sheet sheet = workbook.getSheetAt(0);
+            for (int i = 1; i <= sheet.getLastRowNum(); i++) {
+                Row row = sheet.getRow(i);
+                if (row == null) {
+                    continue;
+                }
+                Cell cellid = row.getCell(0);
+                if (cellid == null || formatter.formatCellValue(cellid).isBlank()) {
+                    continue;
+                }
+                Person person = new Person();
+                person.setId((int) Double.parseDouble(formatter.formatCellValue(cellid)));
+                person.setFirstName(formatter.formatCellValue(row.getCell(1)));
+                person.setLastName(formatter.formatCellValue(row.getCell(2)));
+                person.setNationalCode(formatter.formatCellValue(row.getCell(3)));
+                person.setBirthDate(formatter.formatCellValue(row.getCell(4)));
+                people.add(person);
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("خطا در خواندن فایل اکسل", e);
+        }
+        return people;
     }
 }
