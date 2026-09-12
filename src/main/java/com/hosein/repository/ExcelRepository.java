@@ -62,7 +62,7 @@ public class ExcelRepository {
         DataFormatter formatter = new DataFormatter();
 
         try (FileInputStream fis = new FileInputStream(FILE_PATH);
-             Workbook workbook = new XSSFWorkbook()) {
+             Workbook workbook = new XSSFWorkbook(fis)) {
             Sheet sheet = workbook.getSheetAt(0);
             for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                 Row row = sheet.getRow(i);
