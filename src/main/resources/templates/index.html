@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مدیریت رکوردهای اکسل</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1>مدیریت رکوردهای فایل اکسل</h1>
+
+    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
+
+    <a th:href="@{/people/new}" class="btn btn-primary">افزودن رکورد جدید</a>
+
+    <table class="data-table">
+        <thead>
+        <tr>
+            <th>ردیف</th>
+            <th>نام</th>
+            <th>نام خانوادگی</th>
+            <th>کد ملی</th>
+            <th>تاریخ تولد</th>
+            <th>عملیات</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="person : ${people}">
+            <td th:text="${person.id}"></td>
+            <td th:text="${person.firstName}"></td>
+            <td th:text="${person.lastName}"></td>
+            <td th:text="${person.nationalCode}"></td>
+            <td th:text="${person.birthDate}"></td>
+            <td class="actions">
+                <a th:href="@{/people/edit/{id}(id=${person.id})}" class="btn btn-small btn-edit">ویرایش</a>
+                <a th:href="@{/people/delete/{id}(id=${person.id})}"
+                   class="btn btn-small btn-delete"
+                   onclick="return confirm('آیا از حذف این رکورد مطمئن هستید؟');">حذف</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(people)}">
+            <td colspan="6" class="empty-row">هیچ رکوردی در فایل اکسل ثبت نشده است</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
