@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${isEdit} ? 'ویرایش رکورد' : 'افزودن رکورد جدید'"></title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${isEdit} ? 'ویرایش رکورد' : 'افزودن رکورد جدید'"></h1>
+
+    <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+
+    <form th:action="@{/people/save}" th:object="${person}" method="post" class="data-form">
+        <input type="hidden" th:field="*{id}"/>
+
+        <div class="form-group">
+            <label for="firstName">نام</label>
+            <input type="text" id="firstName" th:field="*{firstName}" placeholder="مثال: علی"/>
+            <span class="field-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="lastName">نام خانوادگی</label>
+            <input type="text" id="lastName" th:field="*{lastName}" placeholder="مثال: احمدی"/>
+            <span class="field-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="nationalCode">کد ملی</label>
+            <input type="text" id="nationalCode" th:field="*{nationalCode}" placeholder="مثال: ۰۰۱۲۳۴۵۶۷۸"
+                   maxlength="10"/>
+            <span class="field-error" th:if="${#fields.hasErrors('nationalCode')}" th:errors="*{nationalCode}"></span>
+        </div>
+
+        <div class="form-group">
+            <label for="birthDate">تاریخ تولد</label>
+            <input type="text" id="birthDate" th:field="*{birthDate}" placeholder="مثال: ۱۴۰۰/۰۱/۰۱"/>
+            <span class="field-error" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary">ذخیره</button>
+            <a th:href="@{/people}" class="btn btn-secondary">انصراف</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>
