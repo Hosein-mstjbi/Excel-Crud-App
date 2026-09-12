@@ -1,0 +1,135 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Tahoma, Arial, sans-serif;
+    background-color: #f4f6f8;
+    margin: 0;
+    padding: 30px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #ffffff;
+    padding: 25px 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.alert-success {
+    background-color: #e6f7ec;
+    color: #1e7e34;
+    border: 1px solid #b7ebc6;
+}
+
+.alert-error {
+    background-color: #fdecea;
+    color: #b71c1c;
+    border: 1px solid #f5c6cb;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 16px;
+}
+
+.btn-primary {
+    background-color: #2f7bf5;
+    color: #fff;
+}
+
+.btn-secondary {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 13px;
+    margin: 0 4px;
+}
+
+.btn-edit {
+    background-color: #f5a623;
+    color: #fff;
+}
+
+.btn-delete {
+    background-color: #e74c3c;
+    color: #fff;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.data-table th, .data-table td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 12px;
+    text-align: center;
+}
+
+.data-table th {
+    background-color: #f0f2f5;
+    color: #2c3e50;
+}
+
+.empty-row {
+    color: #888;
+    padding: 20px;
+}
+
+.data-form {
+    max-width: 450px;
+}
+
+.form-group {
+    margin-bottom: 16px;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #34495e;
+}
+
+.form-group input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.field-error {
+    color: #e74c3c;
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.form-actions {
+    margin-top: 10px;
+}
